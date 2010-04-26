@@ -13,7 +13,9 @@ TODAY = Date.today.strftime( "%Y%m%d" )
 # * version varchar(12),
 # * total_downloads integer,
 # * version_downloads integer
-db = SQLite3::Database.new( "stats.db" )
+dbfile = File.join( File.dirname(__FILE__), "stats.db" )
+puts dbfile
+db = SQLite3::Database.new( dbfile )
 
 # grab rubygems.org page and parse stats
 doc = Nokogiri::HTML( open( 'http://rubygems.org/gems/cerberus' ) )
