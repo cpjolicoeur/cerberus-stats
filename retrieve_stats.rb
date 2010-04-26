@@ -13,7 +13,7 @@ TODAY = Date.today.strftime( "%Y%m%d" )
 # * version varchar(12),
 # * total_downloads integer,
 # * version_downloads integer
-dbfile = File.join( File.dirname(__FILE__), "stats.db" )
+dbfile = File.join( File.expand_path( File.dirname(__FILE__) ), "stats.db" )
 puts dbfile
 db = SQLite3::Database.new( dbfile )
 
