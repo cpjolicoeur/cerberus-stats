@@ -37,9 +37,9 @@ doc.css( 'span:nth-child(2) strong' ).each do |elm|
 end
 
 # store stats in the DB
-row = db.execute( "select * from stats where date = '#{TODAY}'" )
+row = db.execute( "select * from stats where date = '#{TODAY}' AND version = '#{@version}'" )
 if row.empty? # insert new record
   db.execute( "insert into stats values ('#{TODAY}', '#{@version}', #{@total_downloads}, #{@version_downloads})" )
 else        # update existing record
-  db.execute( "update stats set total_downloads = #{@total_downloads}, version_downloads = #{@version_downloads} where date = '#{TODAY}'" )
+  db.execute( "update stats set total_downloads = #{@total_downloads}, version_downloads = #{@version_downloads} where date = '#{TODAY}' AND version = '#{@version}'" )
 end
