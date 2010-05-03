@@ -1,10 +1,12 @@
 #!/usr/bin/env ruby
 
+require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 require 'sqlite3'
 
 TODAY = Date.today.strftime( "%Y%m%d" )
+DEBUG = ARGV.include?( '--debug' )
 
 #
 # setup sqlite DB connection
@@ -13,23 +15,25 @@ TODAY = Date.today.strftime( "%Y%m%d" )
 # * version varchar(12),
 # * total_downloads integer,
 # * version_downloads integer
-db = SQLite3::Database.new( "stats.db" )
+dbfile = File.join( File.expand_path( File.dirname(__FILE__) ), "stats.db" )
+puts dbfile if DEBUG
+db = SQLite3::Database.new( dbfile )
 
 # grab rubygems.org page and parse stats
 doc = Nokogiri::HTML( open( 'http://rubygems.org/gems/cerberus' ) )
 doc.css( 'h3' ).each do |elm|
   @version = elm.content
-  puts "version: #{@version}"
+  puts "version: #{@version}" if DEBUG
 end
 
 doc.css( 'span:nth-child(1) strong' ).each do |elm|
   @total_downloads = elm.content.gsub( /,/, '' ).to_i
-  puts "total downloads: #{@total_downloads}"
+  puts "total downloads: #{@total_downloads}" if DEBUG
 end
 
 doc.css( 'span:nth-child(2) strong' ).each do |elm|
   @version_downloads = elm.content.gsub( /,/, '' ).to_i
-  puts "version downloads: #{@version_downloads}"
+  puts "version downloads: #{@version_downloads}" if DEBUG
 end
 
 # store stats in the DB
